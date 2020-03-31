@@ -1,17 +1,12 @@
 package com.cursojava.curso.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.cursojava.curso.entities.pk.OrderItemPk;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,29 +18,39 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_user")
-public class User implements Serializable {
+@Table(name="tb_ordem_item")
+public class OrderItem implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String name;
-	private String email;
-	private String phone;
-	private String password;
+	@EmbeddedId
+	private OrderItemPk id;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "client")
-	private List<Order> orders = new ArrayList<>();
+	private Integer quantity;
+	private Double price;
 
-	public User(Long id, String name, String email, String phone, String password) {		
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.phone = phone;
-		this.password = password;
+	public OrderItem(Order order, Product product, Integer quantity, Double price) {
+		super();
+		id.setOrder(order);
+		id.setProduct(product);
+		this.quantity = quantity;
+		this.price = price;
+	}
+	
+	public Order getOrder() {
+		return id.getOrder();
+	}
+	
+	public void setOrder(Order order) {
+		this.id.setOrder(order);
+	}
+	
+	public Product getProduct() {
+		return id.getProduct();
+	}
+	
+	public void setProduct(Product product) {
+		this.id.setProduct(product);
 	}
 
 	@Override
@@ -64,7 +69,7 @@ public class User implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		OrderItem other = (OrderItem) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

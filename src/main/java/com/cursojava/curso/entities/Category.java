@@ -1,14 +1,14 @@
 package com.cursojava.curso.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,13 +18,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "tb_user")
-public class User implements Serializable {
+@Table(name = "tb_category")
+public class Category implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,20 +32,14 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private String email;
-	private String phone;
-	private String password;
-
+	
 	@JsonIgnore
-	@OneToMany(mappedBy = "client")
-	private List<Order> orders = new ArrayList<>();
+	@ManyToMany(mappedBy = "categories")
+	private Set<Product> products = new HashSet<>();
 
-	public User(Long id, String name, String email, String phone, String password) {		
+	public Category(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		this.email = email;
-		this.phone = phone;
-		this.password = password;
 	}
 
 	@Override
@@ -64,7 +58,7 @@ public class User implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		Category other = (Category) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
