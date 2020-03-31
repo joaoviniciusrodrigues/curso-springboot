@@ -7,14 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.cursojava.curso.entities.pk.OrderItemPk;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -24,9 +24,14 @@ public class OrderItem implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private OrderItemPk id;
+	private OrderItemPk id = new OrderItemPk();
 
+	@Getter
+	@Setter
 	private Integer quantity;
+	
+	@Getter
+	@Setter
 	private Double price;
 
 	public OrderItem(Order order, Product product, Integer quantity, Double price) {
@@ -37,6 +42,7 @@ public class OrderItem implements Serializable{
 		this.price = price;
 	}
 	
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
