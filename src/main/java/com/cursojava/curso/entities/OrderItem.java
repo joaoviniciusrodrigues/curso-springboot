@@ -33,6 +33,10 @@ public class OrderItem implements Serializable{
 	@Getter
 	@Setter
 	private Double price;
+	
+	public Double getSubTotal() {
+		return price * quantity; 
+	}
 
 	public OrderItem(Order order, Product product, Integer quantity, Double price) {
 		super();
